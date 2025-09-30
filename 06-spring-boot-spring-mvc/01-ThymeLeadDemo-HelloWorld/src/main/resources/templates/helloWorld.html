@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Processed Output</title>
+    <link rel="stylesheet"
+          th:href= "@{/CSS/hello.css}" />
+</head>
+<body>
+
+    <h1 class="vijay">Hello World of Spring</h1>
+
+    Employee name : <span th:text="${param.firstName}" />
+    <br><br/>
+    Message from the controller : <span th:text="${message}" />
+
+</body>
+</html>

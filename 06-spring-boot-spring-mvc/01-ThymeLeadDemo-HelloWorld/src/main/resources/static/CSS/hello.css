@@ -1,0 +1,10 @@
+.vijay{
+    font-style: italic;
+    color:blue;
+}
+
+#sub-heading{
+    color: lightblue;       /* sets text color */
+    font-style: italic;     /* makes text italic */
+    font-weight: bold;
+}
