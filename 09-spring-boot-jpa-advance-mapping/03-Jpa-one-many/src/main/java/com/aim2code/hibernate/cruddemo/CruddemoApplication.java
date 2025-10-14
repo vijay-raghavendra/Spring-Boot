@@ -1,6 +1,7 @@
 package com.aim2code.hibernate.cruddemo;
 
 import com.aim2code.hibernate.cruddemo.DAO.AppDAO;
+import com.aim2code.hibernate.cruddemo.entity.Course;
 import com.aim2code.hibernate.cruddemo.entity.Instructor;
 import com.aim2code.hibernate.cruddemo.entity.InstructorDetail;
 import org.springframework.boot.CommandLineRunner;
@@ -26,8 +27,31 @@ public class CruddemoApplication {
             //findInstructorById(appDAO);
             //DeleteInstructorById(appDAO);
             //findInstructorDetailById(appDAO);
-            DeleteInstructorDetailsById(appDAO);
+            //DeleteInstructorDetailsById(appDAO);
+            createInstructorWithCourse(appDAO);
         };
+    }
+
+    private void createInstructorWithCourse(AppDAO appDAO) {
+
+        Instructor instructor = new Instructor("Vijay","Raghavendra","vijay@email.com");
+
+        InstructorDetail instructorDetail = new InstructorDetail("http://www.aim2code.com/youtube.com","watching dichakdichak");
+
+        instructor.setInstructorDetail(instructorDetail);
+
+        Course course1 = new Course("Spring Boot JPA");
+        Course course2 = new Course("Spring Boot REST");
+        Course course3 = new Course("Spring Boot MVC");
+        Course course4 = new Course("Spring Boot HIBERNATE");
+
+        instructor.add(course1);
+        instructor.add(course2);
+        instructor.add(course3);
+        instructor.add(course4);
+
+        appDAO.save(instructor);
+
     }
 
     private void DeleteInstructorDetailsById(AppDAO appDAO) {
