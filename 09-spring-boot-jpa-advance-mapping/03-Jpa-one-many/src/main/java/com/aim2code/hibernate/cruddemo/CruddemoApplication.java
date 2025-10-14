@@ -28,8 +28,17 @@ public class CruddemoApplication {
             //DeleteInstructorById(appDAO);
             //findInstructorDetailById(appDAO);
             //DeleteInstructorDetailsById(appDAO);
-            createInstructorWithCourse(appDAO);
+            //createInstructorWithCourse(appDAO);
+            findInstructorWithCourses(appDAO);
         };
+    }
+
+    private void findInstructorWithCourses(AppDAO appDAO) {
+        int id=1;
+        Instructor instructor = appDAO.findById(id);
+        System.out.println("Instructor Detail: "+instructor);
+        System.out.println("The Associated Courses:"+instructor.getCourses());
+
     }
 
     private void createInstructorWithCourse(AppDAO appDAO) {
