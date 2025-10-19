@@ -9,8 +9,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.awt.*;
+import java.util.List;
+
 
 @SpringBootApplication
 public class CruddemoApplication {
@@ -29,8 +29,51 @@ public class CruddemoApplication {
             //findInstructorDetailById(appDAO);
             //DeleteInstructorDetailsById(appDAO);
             //createInstructorWithCourse(appDAO);
-            findInstructorWithCourses(appDAO);
+            //findInstructorWithCourses(appDAO);
+            //findCoursesForInstructor(appDAO);
+            //findCoursesForInstructorJoinFetch(appDAO);
+            UpdateInstructor(appDAO);
         };
+    }
+
+    private void UpdateInstructor(AppDAO appDAO) {
+        int id=1;
+        System.out.println("Finding the Instructor by ID : ");
+        Instructor instructor = appDAO.findById(id);
+        System.out.println("Instructor Info before Update: "+instructor);
+        instructor.setInstructorLastName("RAGHU");
+        appDAO.updateInstructor(instructor);/*
+        Instructor instructor1 = appDAO.findById(id);*/
+        System.out.println("Instructor Info after Update: "+instructor);
+    }
+
+    private void findCoursesForInstructorJoinFetch(AppDAO appDAO) {
+        int id =1;
+        System.out.println("Finding instructor By id: "+id);
+        //finding the instructor
+        Instructor instructor1 = appDAO.findInstructorByIdJoinFetch(id);
+        System.out.println("The Instructor is: "+instructor1);
+        //finding the courses for instructor
+        System.out.println("The Courses are: ");
+        for(Course course : instructor1.getCourses() )
+        {
+            System.out.println(course);
+        }
+    }
+
+    private void findCoursesForInstructor(AppDAO appDAO) {
+
+        int id =1;
+        System.out.println("Finding instructor By id: "+id);
+        Instructor instructor = appDAO.findById(id);
+        System.out.println("The Instructor is: "+instructor);
+        //finding the courses for instructor
+        List<Course> courses = appDAO.findCoursesByInstructorId(id);
+        System.out.println("The Courses are: ");
+        for(Course course : courses)
+        {
+            System.out.println(course);
+        }
     }
 
     private void findInstructorWithCourses(AppDAO appDAO) {

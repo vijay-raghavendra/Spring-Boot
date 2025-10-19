@@ -23,12 +23,12 @@ public class Instructor {
     @Column(name = "email")
     private String instructorEmail;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_detail_id")
     private InstructorDetail instructorDetail;
 
     @OneToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.PERSIST},
-            mappedBy = "instructor",fetch = FetchType.EAGER)
+            mappedBy = "instructor",fetch = FetchType.LAZY)
     private List<Course> courses;
 
     public Instructor()
@@ -91,7 +91,7 @@ public class Instructor {
     }
 
     @Override
-    public String toString() {
+    public String  toString() {
         return "Instructor{" +
                 "Id=" + Id +
                 ", instructorFirstName='" + instructorFirstName + '\'' +
