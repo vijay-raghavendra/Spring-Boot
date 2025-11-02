@@ -1,0 +1,51 @@
+package com.aim2code.aopDemo;
+
+import com.aim2code.aopDemo.DAO.AccountDAO;
+import com.aim2code.aopDemo.DAO.MemberShipDAO;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+@SpringBootApplication
+public class AopDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(AopDemoApplication.class, args);
+	}
+
+    @Bean
+    public CommandLineRunner commandLineRunner(AccountDAO accountDAO, MemberShipDAO memberShipDAO) {
+        return runner ->{
+            demoTheBeforeAdvice(accountDAO,memberShipDAO);
+        };
+    }
+
+    private void demoTheBeforeAdvice(AccountDAO accountDAO, MemberShipDAO memberShipDAO) {
+        //call the business methods
+        Account account = new Account();
+        accountDAO.AddAccount(account,true);
+        accountDAO.checkAccount();
+
+        // call the accountdao getter/setter methods
+        accountDAO.setName("foobar");
+        accountDAO.setServiceCode("silver");
+
+        String name = accountDAO.getName();
+        String code = accountDAO.getServiceCode();
+
+
+        //call the membership business methods
+        memberShipDAO.AddMember();
+        memberShipDAO.checkMember();
+
+       /* // Do it again
+        System.out.println("\n lets Call it again! ");
+
+        //call the business method
+        accountDAO.AddAccount();*/
+
+    }
+
+
+}
