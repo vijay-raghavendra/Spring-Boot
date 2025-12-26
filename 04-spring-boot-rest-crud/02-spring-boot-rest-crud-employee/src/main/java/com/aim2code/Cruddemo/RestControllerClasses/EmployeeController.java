@@ -3,8 +3,7 @@ package com.aim2code.Cruddemo.RestControllerClasses;
 import com.aim2code.Cruddemo.Entity.Employee;
 import com.aim2code.Cruddemo.ErrorClasses.EmployeeNotFound;
 import com.aim2code.Cruddemo.ServiceLayer.EmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +16,20 @@ public class EmployeeController {
 
     private EmployeeService employeeService;
 
-    private ObjectMapper objectMapper;
-
+    private JsonMapper jsonMapper;
+	
+	/*private ObjectMapper objectMapper;
+	
     @Autowired
     public EmployeeController(EmployeeService employeeService, ObjectMapper objectMapper) {
         this.employeeService = employeeService;
         this.objectMapper = objectMapper;
+    }*/
+
+    @Autowired
+    public EmployeeController(EmployeeService employeeService, JsonMapper jsonMapper) {
+        this.employeeService = employeeService;
+        this.jsonMapper = jsonMapper;
     }
 
     @GetMapping("/employees")
@@ -60,7 +67,30 @@ public class EmployeeController {
         return employeeService.saveOrUpdateEmployee(employee);
     }
 
+	//New Patchmapping procedure for spring Boot 4
     @PatchMapping("/employees/{employee_Id}")
+    public Employee partiallyUpdateEmployee(@PathVariable int employee_Id, @RequestBody Map<String,Object> patchPayLoad)
+    {
+        Employee theEmployee = employeeService.getEmployeeById(employee_Id);
+        
+        if(theEmployee == null)
+        {
+            throw new EmployeeNotFound("employee Id :"+  employee_Id + " not found in Database for Update");
+        } else if (patchPayLoad.containsKey("id")) {
+            throw new EmployeeNotFound("Cannot Update the Id of the existing Employee");
+        }
+        else {
+            //Employee patchedEmployee = apply(patchPayLoad, theEmployee);
+
+            Employee patchEmployee = jsonMapper.updateValue(theEmployee, patchPayLoad);
+
+            return employeeService.saveOrUpdateEmployee(patchEmployee);
+
+        }
+    }
+
+	//Old Patch Mapping Method Using the ObjectMapper Class for version spring boot <4
+    /*@PatchMapping("/employees/{employee_Id}")
     public Employee partiallyUpdateEmployee(@PathVariable int employee_Id, @RequestBody Map<String,Object> patchPayLoad)
     {
         Employee theEmployee = employeeService.getEmployeeById(employee_Id);
@@ -92,7 +122,7 @@ public class EmployeeController {
 
         //Convert the JSON Node to Employee object and return
         return objectMapper.convertValue(employeeNode, Employee.class);
-    }
+    }*/
 
     @DeleteMapping("/employees/{employee_id}")
     public String deleteEmployee(@PathVariable int employee_id){
